@@ -4,23 +4,13 @@ function [armChoice] = softmaxAction(choiceArray,temperature)
     softmaxResult = exp(choiceArray./temperature) / sum(exp(choiceArray./temperature));
     
     %Find cumulative sum
-    cumsum(softmaxResult);
+    softmaxSum = cumsum(softmaxResult);
     
-    %Create random choice
-    randomChoice = rand;
+    %Assign Values to softmax options
+    softmaxOptions = softmaxSum > rand();
     
-    %Find max choice according to softmax rule
-    [maxValue,maxChoice] = max(softmaxResult);
-    
-    %Assign max choice to arm choice
-    armChoice = maxChoice;
-    
-    %Randomly explore other options
-    if randomChoice > maxValue
-        
-        %Choose Other arm
-        [armChoice] = randi(length(choiceArray));
-    end
+    %Find arm choice
+    armChoice = find(softmaxOptions, 1, 'first');
     
     
 end
